@@ -2,10 +2,10 @@ package wolverine.noteit.activity
 
 import android.app.Activity
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_note_editor.*
 import wolverine.noteit.NoteItApplication
 import wolverine.noteit.R
@@ -39,17 +39,27 @@ class NoteEditorActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item != null) {
             if (item.itemId == R.id.action_done) {
-                if (note == null) {
-                    note = Note(edt_note_editor.text.toString())
-                } else {
-                    note?.text = edt_note_editor.text.toString();
-                }
-                var id = (application as NoteItApplication).boxStore?.boxFor(Note::class.java)?.put(note);
-                Toast.makeText(this, "Successfully Save...!", Toast.LENGTH_SHORT);
-                setResult(Activity.RESULT_OK)
-                finish()
+                saveNote()
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun NoteEditorActivity.saveNote() {
+        var isNewNote = true
+        if (note == null) {
+            note = Note(edt_note_editor.text.toString())
+            isNewNote = false
+        } else {
+            note?.text = edt_note_editor.text.toString();
+        }
+        var id = (application as NoteItApplication).boxStore?.boxFor(Note::class.java)?.put(note);
+        Snackbar.make(cl_note_editor, "${if (isNewNote) "Successfully Save...!" else "Successfully Update...!"}", Snackbar.LENGTH_SHORT).show()
+        setResult(Activity.RESULT_OK)
+        finish()
+    }
+
+    override fun onBackPressed() {
+        saveNote();
     }
 }

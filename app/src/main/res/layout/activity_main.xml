@@ -19,8 +19,8 @@
         android:layout_margin="16dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/ic_add_note"
         android:padding="14dp"
-
+        android:background="@drawable/round_button_background"
+android:src="@drawable/icn_note_new"
         />
 </RelativeLayout>

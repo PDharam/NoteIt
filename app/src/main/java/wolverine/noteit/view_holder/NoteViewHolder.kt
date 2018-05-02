@@ -2,7 +2,7 @@ package wolverine.noteit.view_holder
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import kotlinx.android.synthetic.main.row_note.view.*
+import kotlinx.android.synthetic.main.row_note_new.view.*
 import wolverine.noteit.R
 import wolverine.noteit.adapter.NoteAdapter
 import wolverine.noteit.model.Note
