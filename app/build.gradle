@@ -20,7 +20,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -37,7 +37,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:26.0.0-beta1'
     // all below should be added automatically by the plugin
     kapt "io.objectbox:objectbox-processor:$objectboxVersion"
-    compile "io.objectbox:objectbox-kotlin:$objectboxVersion"
+    implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
     // some useful Kotlin extension functions
     implementation 'com.android.support:design:26.0.0-beta1'
 }
