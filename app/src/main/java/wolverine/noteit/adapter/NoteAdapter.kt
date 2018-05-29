@@ -13,7 +13,7 @@ import wolverine.noteit.view_holder.NoteViewHolder
  * Created by Dell on 03-Apr-18.
  */
 class NoteAdapter(val context: Context, private var noteList: ArrayList<Note>) : RecyclerView.Adapter<NoteViewHolder>() {
-    var OnClickListner: OnClickListner? = null;
+    var OnClickListner: OnClickListner? = null
 
     override fun onBindViewHolder(holder: NoteViewHolder?, position: Int) {
         if (holder != null) {
@@ -30,22 +30,22 @@ class NoteAdapter(val context: Context, private var noteList: ArrayList<Note>) :
         return NoteViewHolder(this, LayoutInflater.from(context).inflate(R.layout.row_note_new, parent, false))
     }
 
-    public fun setNoteList(noteList: ArrayList<Note>) {
+    fun setNoteList(noteList: ArrayList<Note>) {
         this.noteList = noteList
         notifyDataSetChanged()
     }
 
-    public fun removeItem(position: Int) {
-        noteList.removeAt(position);
+    fun removeItem(position: Int) {
+        noteList.removeAt(position)
         // notify the item removed by position
         // to perform recycler view delete animations
         // NOTE: don't call notifyDataSetChanged()
-        notifyItemRemoved(position);
+        notifyItemRemoved(position)
     }
 
-    public fun restoreItem(note: Note, position: Int) {
-        noteList.add(position, note);
+    fun restoreItem(note: Note, position: Int) {
+        noteList.add(position, note)
         // notify item added by position
-        notifyItemInserted(position);
+        notifyItemInserted(position)
     }
 }

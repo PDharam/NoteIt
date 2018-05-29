@@ -10,8 +10,8 @@ import java.io.Serializable
 @Entity
 class Note : Serializable {
     @Id
-    var id: Long = 0;
-    var text: String = "";
+    var id: Long = 0
+    var text: String = ""
 
     constructor(text: String) {
         this.text = text

@@ -27,31 +27,31 @@ import wolverine.noteit.view_holder.NoteViewHolder
 class MainActivity : AppCompatActivity(), OnClickListner, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
 
-    var noteList = ArrayList<Note>();
-    val NOTE_REQUEST_CODE: Int = 101;
-    val EDIT_NOTE_REQUEST_CODE: Int = 201;
+    var noteList = ArrayList<Note>()
+    val NOTE_REQUEST_CODE: Int = 101
+    val EDIT_NOTE_REQUEST_CODE: Int = 201
     var noteAdapter: NoteAdapter? = null
-    var boxStore: BoxStore? = null;
-    var noteBox: Box<Note>? = null;
+    var boxStore: BoxStore? = null
+    var noteBox: Box<Note>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        boxStore = (application as NoteItApplication).boxStore;
-        noteBox = boxStore?.boxFor(Note::class.java);
+        boxStore = (application as NoteItApplication).boxStore
+        noteBox = boxStore?.boxFor(Note::class.java)
 
-        var recordsize = noteBox?.query()?.build()?.find()?.size;
+        val recordsize = noteBox?.query()?.build()?.find()?.size
 
-        if (recordsize != null && recordsize!! > 0) {
-            noteList = noteBox?.query()?.build()?.find() as ArrayList<Note>;
+        if (recordsize != null && recordsize > 0) {
+            noteList = noteBox?.query()?.build()?.find() as ArrayList<Note>
         }
 
 
-        rv_note_list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        rv_note_list.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        noteAdapter = NoteAdapter(this, noteList);
+        rv_note_list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rv_note_list.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        noteAdapter = NoteAdapter(this, noteList)
         noteAdapter?.OnClickListner = this
-        rv_note_list.adapter = noteAdapter;
+        rv_note_list.adapter = noteAdapter
 
         // adding item touch helper
         // only ItemTouchHelper.LEFT added to detect Right to Left swipe
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), OnClickListner, RecyclerItemTouchHelpe
         val itemTouchHelperCallback = RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this)
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rv_note_list)
 
-        img_btn_add_note.setOnClickListener(View.OnClickListener {
+        img_btn_add_note.setOnClickListener({
             startActivityForResult(Intent(this, NoteEditorActivity::class.java), NOTE_REQUEST_CODE)
         })
     }
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), OnClickListner, RecyclerItemTouchHelpe
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == NOTE_REQUEST_CODE || requestCode == EDIT_NOTE_REQUEST_CODE) {
                 noteList.clear()
-                noteList = noteBox?.query()?.build()?.find() as ArrayList<Note>;
+                noteList = noteBox?.query()?.build()?.find() as ArrayList<Note>
                 noteAdapter?.setNoteList(noteList)
             }
         }
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity(), OnClickListner, RecyclerItemTouchHelpe
     }
 
     override fun editNote(position: Int) {
-        val intent: Intent = Intent(this, NoteEditorActivity::class.java)
+        val intent = Intent(this, NoteEditorActivity::class.java)
         intent.putExtra("Note", noteList[position])
         startActivityForResult(intent, EDIT_NOTE_REQUEST_CODE)
     }
@@ -110,11 +110,15 @@ class MainActivity : AppCompatActivity(), OnClickListner, RecyclerItemTouchHelpe
 
             // remove the item from recycler view
             noteAdapter?.removeItem(viewHolder.adapterPosition)
+            //remove the note object from objectbox db
+            noteBox?.remove(deletedItem)
 
             // showing snack bar with Undo option
             val snackbar = Snackbar
                     .make(rl_main, name + " removed from cart!", Snackbar.LENGTH_LONG)
-            snackbar.setAction("UNDO", View.OnClickListener {
+            snackbar.setAction("UNDO", {
+                //undo the deleted note, insert in db
+                noteBox?.put(deletedItem)
                 // undo is selected, restore the deleted item
                 noteAdapter?.restoreItem(deletedItem, deletedIndex)
             })

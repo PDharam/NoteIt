@@ -16,7 +16,7 @@ class NoteEditorActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_editor)
-        getIntentData();
+        getIntentData()
         setData()
 
     }
@@ -26,7 +26,7 @@ class NoteEditorActivity : AppCompatActivity() {
     }
 
     private fun getIntentData() {
-        val intent = getIntent();
+        val intent = getIntent()
         note = intent.getSerializableExtra("Note") as Note?
     }
 
@@ -51,15 +51,15 @@ class NoteEditorActivity : AppCompatActivity() {
             note = Note(edt_note_editor.text.toString())
             isNewNote = false
         } else {
-            note?.text = edt_note_editor.text.toString();
+            note?.text = edt_note_editor.text.toString()
         }
-        var id = (application as NoteItApplication).boxStore?.boxFor(Note::class.java)?.put(note);
-        Snackbar.make(cl_note_editor, "${if (isNewNote) "Successfully Save...!" else "Successfully Update...!"}", Snackbar.LENGTH_SHORT).show()
+        (application as NoteItApplication).boxStore.boxFor(Note::class.java)?.put(note)
+        Snackbar.make(cl_note_editor, if (isNewNote) "Successfully Save...!" else "Successfully Update...!", Snackbar.LENGTH_SHORT).show()
         setResult(Activity.RESULT_OK)
         finish()
     }
 
     override fun onBackPressed() {
-        saveNote();
+        saveNote()
     }
 }
